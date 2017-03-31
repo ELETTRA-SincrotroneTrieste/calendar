@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="ASCII"?>
+<pogoDsl:PogoSystem xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pogoDsl="http://www.esrf.fr/tango/pogo/PogoDsl">
+  <classes name="Calendar" pogoRevision="9.4">
+    <description description="Allow to define an activity for every hour." title="Calendar" sourcePath="/home/graziano/ws/calendar/src" language="Cpp" filestogenerate="XMI   file,Code files,Protected Regions" license="GPL" copyright="" hasMandatoryProperty="false" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false">
+      <inheritances classname="Device_Impl" sourcePath=""/>
+      <identification contact="at elettra.eu - graziano.scalamera" author="graziano.scalamera" emailDomain="elettra.eu" classFamily="SoftwareSystem" siteSpecific="" platform="Unix Like" bus="Not Applicable" manufacturer="none" reference=""/>
+    </description>
+    <classProperties name="Activities" description="Allowed activities">
+      <type xsi:type="pogoDsl:StringVectorType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </classProperties>
+    <deviceProperties name="ShiftStartTimes" description="Starting hour of each shift">
+      <type xsi:type="pogoDsl:ShortVectorType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>7</DefaultPropValue>
+      <DefaultPropValue>15</DefaultPropValue>
+      <DefaultPropValue>23</DefaultPropValue>
+    </deviceProperties>
+    <deviceProperties name="ShiftNames" description="Shift names">
+      <type xsi:type="pogoDsl:StringVectorType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>Morning</DefaultPropValue>
+      <DefaultPropValue>Late</DefaultPropValue>
+      <DefaultPropValue>Night</DefaultPropValue>
+    </deviceProperties>
+    <deviceProperties name="CalendarFile" description="File where to store the calendar">
+      <type xsi:type="pogoDsl:StringType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </deviceProperties>
+    <deviceProperties name="Activities" description="Allowed activities">
+      <type xsi:type="pogoDsl:StringVectorType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </deviceProperties>
+    <commands name="State" description="This command gets the device state (stored in its device_state data member) and returns it to the caller." execMethod="dev_state" displayLevel="OPERATOR" polledPeriod="0">
+      <argin description="none">
+        <type xsi:type="pogoDsl:VoidType"/>
+      </argin>
+      <argout description="Device state">
+        <type xsi:type="pogoDsl:StateType"/>
+      </argout>
+      <status abstract="true" inherited="true" concrete="true"/>
+    </commands>
+    <commands name="Status" description="This command gets the device status (stored in its device_status data member) and returns it to the caller." execMethod="dev_status" displayLevel="OPERATOR" polledPeriod="0">
+      <argin description="none">
+        <type xsi:type="pogoDsl:VoidType"/>
+      </argin>
+      <argout description="Device status">
+        <type xsi:type="pogoDsl:ConstStringType"/>
+      </argout>
+      <status abstract="true" inherited="true" concrete="true"/>
+    </commands>
+    <commands name="LoadActivities" description="Load an array of:&#xA;time=YYYY-MM-DD HH;activity=.." execMethod="load_activities" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+      <argin description="Array of:&#xA;time=YYYY-MM-DD HH;activity=..">
+        <type xsi:type="pogoDsl:StringArrayType"/>
+      </argin>
+      <argout description="">
+        <type xsi:type="pogoDsl:VoidType"/>
+      </argout>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </commands>
+    <commands name="ExportActivities" description="Export an array of:&#xA;time=YYYY-MM-DD HH;activity=.." execMethod="export_activities" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+      <argin description="">
+        <type xsi:type="pogoDsl:VoidType"/>
+      </argin>
+      <argout description="Array of:&#xA;time=YYYY-MM-DD HH;activity=..">
+        <type xsi:type="pogoDsl:StringArrayType"/>
+      </argout>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </commands>
+    <commands name="LoadShiftActivities" description="Load an array of:&#xA;time=YYYY-MM-DD shiftname;activity=.." execMethod="load_shift_activities" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+      <argin description="Array of:&#xA;time=YYYY-MM-DD shiftname;activity=..">
+        <type xsi:type="pogoDsl:StringArrayType"/>
+      </argin>
+      <argout description="">
+        <type xsi:type="pogoDsl:VoidType"/>
+      </argout>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </commands>
+    <commands name="ExportShiftActivities" description="Export an array of:&#xA;time=YYYY-MM-DD shiftname;activity=.." execMethod="export_shift_activities" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+      <argin description="">
+        <type xsi:type="pogoDsl:VoidType"/>
+      </argin>
+      <argout description="Array of:&#xA;time=YYYY-MM-DD shiftname;activity=..">
+        <type xsi:type="pogoDsl:StringArrayType"/>
+      </argout>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </commands>
+    <commands name="LoadRangeActivities" description="Load an activity for the range begin time, end time:&#xA;begin_time=YYYY-MM-DD HH;end_time=YYYY-MM-DD HH;activity=.." execMethod="load_range_activities" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+      <argin description="Begin time, end time, activity:&#xA;begin_time=YYYY-MM-DD HH;end_time=YYYY-MM-DD HH;activity=..">
+        <type xsi:type="pogoDsl:StringType"/>
+      </argin>
+      <argout description="">
+        <type xsi:type="pogoDsl:VoidType"/>
+      </argout>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </commands>
+    <commands name="LoadShiftRangeActivities" description="Load an activity for the range begin shift, end shift:&#xA;begin_time=YYYY-MM-DD shiftname;end_time=YYYY-MM-DD shiftname;activity=.." execMethod="load_shift_range_activities" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+      <argin description="Begin shift, end shift, activity:&#xA;begin_time=YYYY-MM-DD shiftname;end_time=YYYY-MM-DD shiftname;activity=..">
+        <type xsi:type="pogoDsl:StringType"/>
+      </argin>
+      <argout description="">
+        <type xsi:type="pogoDsl:VoidType"/>
+      </argout>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </commands>
+    <commands name="GetActivity" description="Get the activity for YYYY-MM-DD HH" execMethod="get_activity" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+      <argin description="YYYY-MM-DD HH">
+        <type xsi:type="pogoDsl:StringType"/>
+      </argin>
+      <argout description="Activity">
+        <type xsi:type="pogoDsl:StringType"/>
+      </argout>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </commands>
+    <commands name="GetShiftActivity" description="Get the activity for YYYY-MM-DD shiftname" execMethod="get_shift_activity" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+      <argin description="YYYY-MM-DD shiftname">
+        <type xsi:type="pogoDsl:StringType"/>
+      </argin>
+      <argout description="Activity">
+        <type xsi:type="pogoDsl:StringType"/>
+      </argout>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </commands>
+    <commands name="SearchActivity" description="Search for the next activity passed as imput argument" execMethod="search_activity" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+      <argin description="Activity name">
+        <type xsi:type="pogoDsl:StringType"/>
+      </argin>
+      <argout description="YYYY-MM-DD HH">
+        <type xsi:type="pogoDsl:StringType"/>
+      </argout>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </commands>
+    <attributes name="activity" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+      <dataType xsi:type="pogoDsl:StringType"/>
+      <changeEvent fire="true" libCheckCriteria="true"/>
+      <archiveEvent fire="true" libCheckCriteria="true"/>
+      <dataReadyEvent fire="false" libCheckCriteria="true"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <properties description="Actual activity" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+    </attributes>
+    <attributes name="shift" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+      <dataType xsi:type="pogoDsl:StringType"/>
+      <changeEvent fire="true" libCheckCriteria="true"/>
+      <archiveEvent fire="true" libCheckCriteria="true"/>
+      <dataReadyEvent fire="false" libCheckCriteria="true"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <properties description="Actual shift" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+    </attributes>
+    <attributes name="time" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+      <dataType xsi:type="pogoDsl:StringType"/>
+      <changeEvent fire="true" libCheckCriteria="true"/>
+      <archiveEvent fire="true" libCheckCriteria="true"/>
+      <dataReadyEvent fire="false" libCheckCriteria="true"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <properties description="Actual time as YYYY-MM-DD HH" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+    </attributes>
+    <attributes name="hour" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+      <dataType xsi:type="pogoDsl:UShortType"/>
+      <changeEvent fire="true" libCheckCriteria="true"/>
+      <archiveEvent fire="true" libCheckCriteria="true"/>
+      <dataReadyEvent fire="false" libCheckCriteria="true"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <properties description="Actual hour" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+    </attributes>
+    <attributes name="shiftActivity" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+      <dataType xsi:type="pogoDsl:StringType"/>
+      <changeEvent fire="true" libCheckCriteria="true"/>
+      <archiveEvent fire="true" libCheckCriteria="true"/>
+      <dataReadyEvent fire="false" libCheckCriteria="true"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <properties description="Actual activity of this shift" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+    </attributes>
+    <attributes name="shiftNames" attType="Spectrum" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="24" maxY="" allocReadMember="true" isDynamic="false">
+      <dataType xsi:type="pogoDsl:StringType"/>
+      <changeEvent fire="false" libCheckCriteria="false"/>
+      <archiveEvent fire="false" libCheckCriteria="false"/>
+      <dataReadyEvent fire="false" libCheckCriteria="true"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <properties description="Array of shift names" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+    </attributes>
+    <attributes name="activities" attType="Spectrum" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="1000" maxY="" allocReadMember="true" isDynamic="false">
+      <dataType xsi:type="pogoDsl:StringType"/>
+      <changeEvent fire="false" libCheckCriteria="false"/>
+      <archiveEvent fire="false" libCheckCriteria="false"/>
+      <dataReadyEvent fire="false" libCheckCriteria="true"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <properties description="Array of possible activities" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+    </attributes>
+    <preferences docHome="./doc_html" makefileHome="/usr/local/tango-9.2.5a/share/pogo/preferences"/>
+  </classes>
+</pogoDsl:PogoSystem>
