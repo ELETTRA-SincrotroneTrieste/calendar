@@ -37,6 +37,7 @@
 //#include <ctime>
 
 #define UNKNOWN_ACTIVITY	"Unknown"
+#define UNKNOWN_ACTIVITY_NUM	-1
 
 #define KEY_TIME			"time"
 #define KEY_BEGIN_TIME		"begin_time"
@@ -99,6 +100,8 @@ public:
 	Tango::DevString	*attr_time_read;
 	Tango::DevUShort	*attr_hour_read;
 	Tango::DevString	*attr_shiftActivity_read;
+	Tango::DevShort	*attr_activityNum_read;
+	Tango::DevShort	*attr_shiftActivityNum_read;
 	Tango::DevString	*attr_shiftNames_read;
 	Tango::DevString	*attr_activities_read;
 
@@ -207,6 +210,24 @@ public:
  */
 	virtual void read_shiftActivity(Tango::Attribute &attr);
 	virtual bool is_shiftActivity_allowed(Tango::AttReqType type);
+/**
+ *	Attribute activityNum related methods
+ *	Description: Number corresponding to activity label, -1 if unknown activity
+ *
+ *	Data type:	Tango::DevShort
+ *	Attr type:	Scalar
+ */
+	virtual void read_activityNum(Tango::Attribute &attr);
+	virtual bool is_activityNum_allowed(Tango::AttReqType type);
+/**
+ *	Attribute shiftActivityNum related methods
+ *	Description: Number corresponding to activity label, -1 if unknown activity
+ *
+ *	Data type:	Tango::DevShort
+ *	Attr type:	Scalar
+ */
+	virtual void read_shiftActivityNum(Tango::Attribute &attr);
+	virtual bool is_shiftActivityNum_allowed(Tango::AttReqType type);
 /**
  *	Attribute shiftNames related methods
  *	Description: Array of shift names

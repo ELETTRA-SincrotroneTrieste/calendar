@@ -66,13 +66,15 @@
 //================================================================
 //  Attributes managed are:
 //================================================================
-//  activity       |  Tango::DevString	Scalar
-//  shift          |  Tango::DevString	Scalar
-//  time           |  Tango::DevString	Scalar
-//  hour           |  Tango::DevUShort	Scalar
-//  shiftActivity  |  Tango::DevString	Scalar
-//  shiftNames     |  Tango::DevString	Spectrum  ( max = 24)
-//  activities     |  Tango::DevString	Spectrum  ( max = 1000)
+//  activity          |  Tango::DevString	Scalar
+//  shift             |  Tango::DevString	Scalar
+//  time              |  Tango::DevString	Scalar
+//  hour              |  Tango::DevUShort	Scalar
+//  shiftActivity     |  Tango::DevString	Scalar
+//  activityNum       |  Tango::DevShort	Scalar
+//  shiftActivityNum  |  Tango::DevShort	Scalar
+//  shiftNames        |  Tango::DevString	Spectrum  ( max = 24)
+//  activities        |  Tango::DevString	Spectrum  ( max = 1000)
 //================================================================
 
 namespace Calendar_ns
@@ -136,6 +138,8 @@ void Calendar::delete_device()
 	delete[] attr_time_read;
 	delete[] attr_hour_read;
 	delete[] attr_shiftActivity_read;
+	delete[] attr_activityNum_read;
+	delete[] attr_shiftActivityNum_read;
 	delete[] attr_shiftNames_read;
 	delete[] attr_activities_read;
 }
@@ -164,6 +168,8 @@ void Calendar::init_device()
 	attr_time_read = new Tango::DevString[1];
 	attr_hour_read = new Tango::DevUShort[1];
 	attr_shiftActivity_read = new Tango::DevString[1];
+	attr_activityNum_read = new Tango::DevShort[1];
+	attr_shiftActivityNum_read = new Tango::DevShort[1];
 	attr_shiftNames_read = new Tango::DevString[24];
 	attr_activities_read = new Tango::DevString[1000];
 	/*----- PROTECTED REGION ID(Calendar::init_device) ENABLED START -----*/
@@ -177,12 +183,18 @@ void Calendar::init_device()
 		{
 			load_line_conf(line, false/*already UTC*/);
 		}
-		catch(Tango::DevFailed &)
+		catch(Tango::DevFailed &e)
 		{
-
+			set_state(Tango::FAULT);
+			set_status(string(e.errors[0].desc));
 		}
 	}
 	calFile.close();
+	if(get_state() != Tango::FAULT)
+	{
+		set_state(Tango::ON);
+		set_status("Calendar running");
+	}
 
 	memset(c_activities, 0, sizeof(c_activities));
 	memset(c_shiftnames, 0, sizeof(c_shiftnames));
@@ -674,6 +686,71 @@ void Calendar::read_shiftActivity(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
+ *	Read attribute activityNum related method
+ *	Description: Number corresponding to activity label, -1 if unknown activity
+ *
+ *	Data type:	Tango::DevShort
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void Calendar::read_activityNum(Tango::Attribute &attr)
+{
+	//DEBUG_STREAM << "Calendar::read_activityNum(Tango::Attribute &attr) entering... " << endl;
+	/*----- PROTECTED REGION ID(Calendar::read_activityNum) ENABLED START -----*/
+	char utc_time_string[255];
+	strftime(utc_time_string, sizeof(utc_time_string), "%Y-%m-%d %H", &now_utc_tm);
+	DEBUG_STREAM << __func__<<": isdst="<<now_utc_tm.tm_isdst<<" utc time: " << utc_time_string<<endl;
+	map<string,string>::iterator it = calendar.find(utc_time_string);
+	if(it != calendar.end())
+	{
+		vector<string>::iterator itact = find(activities.begin(), activities.end(), it->second);
+		if(itact != activities.end())
+		{
+			cout << __func__ << ": FOUND activity " << it->second << endl;
+			*attr_activityNum_read  = itact - activities.begin();
+			cout << __func__ << ": FOUND activityNum " << *attr_activityNum_read << endl;
+		}
+	}
+	else
+	{
+		cout << __func__ << ": NOT FOUND activity"<< endl;
+		*attr_activityNum_read = UNKNOWN_ACTIVITY_NUM;
+	}
+	cout << __func__ << ": attr_activityNum_read="<<*attr_activityNum_read<< endl;
+	//	Set the attribute value
+	attr.set_value(attr_activityNum_read);
+	
+	/*----- PROTECTED REGION END -----*/	//	Calendar::read_activityNum
+}
+//--------------------------------------------------------
+/**
+ *	Read attribute shiftActivityNum related method
+ *	Description: Number corresponding to activity label, -1 if unknown activity
+ *
+ *	Data type:	Tango::DevShort
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void Calendar::read_shiftActivityNum(Tango::Attribute &attr)
+{
+	//DEBUG_STREAM << "Calendar::read_shiftActivityNum(Tango::Attribute &attr) entering... " << endl;
+	/*----- PROTECTED REGION ID(Calendar::read_shiftActivityNum) ENABLED START -----*/
+	string shift_activity;
+	string shiftname;
+	get_shift_activity(now_local_tm, shift_activity, shiftname);
+
+	vector<string>::iterator itact = find(activities.begin(), activities.end(), shift_activity);
+	if(itact != activities.end())
+		*attr_shiftActivityNum_read  = itact - activities.begin();
+	else
+		*attr_activityNum_read = UNKNOWN_ACTIVITY_NUM;
+	//	Set the attribute value
+	attr.set_value(attr_shiftActivityNum_read);
+	
+	/*----- PROTECTED REGION END -----*/	//	Calendar::read_shiftActivityNum
+}
+//--------------------------------------------------------
+/**
  *	Read attribute shiftNames related method
  *	Description: Array of shift names
  *
@@ -907,9 +984,9 @@ void Calendar::load_range_activities(Tango::DevString argin)
 {
 	DEBUG_STREAM << "Calendar::LoadRangeActivities()  - " << device_name << endl;
 	/*----- PROTECTED REGION ID(Calendar::load_range_activities) ENABLED START -----*/
-	
 	//	Add your own code
 	string arg(argin);
+	DEBUG_STREAM <<__func__<< ": request '" << arg << "'" << endl;
 	map<string,string> activity_conf;
 	vector<string> v_activity_conf;
 	string_explode(arg, ";", v_activity_conf);
@@ -1530,6 +1607,17 @@ void Calendar::load_line_conf(const string &arg, bool convert_local_time)
 				tmp.str(), \
 				(const char*)__func__, Tango::ERR);
 	}
+	vector<string>::iterator itact = find(activities.begin(), activities.end(), str_activity);
+	if(itact == activities.end())
+	{
+		stringstream tmp;
+		tmp << "Trying to load undefined activity '"<<str_activity<<"'";
+		INFO_STREAM << __func__<< ": " << tmp.str() << endl;
+		Tango::Except::throw_exception( \
+				(const char*)"PARSING_ERROR", \
+				tmp.str(), \
+				(const char*)__func__, Tango::ERR);
+	}
 
 	tm tm_tmp;
 	char *ret;
@@ -1613,6 +1701,17 @@ void Calendar::load_shift_conf(const string &arg)
 	{
 		stringstream tmp;
 		tmp << "Configuration parsing error looking for key '"<<KEY_ACTIVITY<<"='";
+		INFO_STREAM << __func__<< ": " << tmp.str() << endl;
+		Tango::Except::throw_exception( \
+				(const char*)"PARSING_ERROR", \
+				tmp.str(), \
+				(const char*)__func__, Tango::ERR);
+	}
+	vector<string>::iterator itact = find(activities.begin(), activities.end(), str_activity);
+	if(itact == activities.end())
+	{
+		stringstream tmp;
+		tmp << "Trying to load undefined activity '"<<str_activity<<"'";
 		INFO_STREAM << __func__<< ": " << tmp.str() << endl;
 		Tango::Except::throw_exception( \
 				(const char*)"PARSING_ERROR", \

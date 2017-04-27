@@ -126,6 +126,38 @@ bool Calendar::is_shiftActivity_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
+ *	Method      : Calendar::is_activityNum_allowed()
+ *	Description : Execution allowed for activityNum attribute
+ */
+//--------------------------------------------------------
+bool Calendar::is_activityNum_allowed(TANGO_UNUSED(Tango::AttReqType type))
+{
+
+	//	Not any excluded states for activityNum attribute in read access.
+	/*----- PROTECTED REGION ID(Calendar::activityNumStateAllowed_READ) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	Calendar::activityNumStateAllowed_READ
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method      : Calendar::is_shiftActivityNum_allowed()
+ *	Description : Execution allowed for shiftActivityNum attribute
+ */
+//--------------------------------------------------------
+bool Calendar::is_shiftActivityNum_allowed(TANGO_UNUSED(Tango::AttReqType type))
+{
+
+	//	Not any excluded states for shiftActivityNum attribute in read access.
+	/*----- PROTECTED REGION ID(Calendar::shiftActivityNumStateAllowed_READ) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	Calendar::shiftActivityNumStateAllowed_READ
+	return true;
+}
+
+//--------------------------------------------------------
+/**
  *	Method      : Calendar::is_shiftNames_allowed()
  *	Description : Execution allowed for shiftNames attribute
  */

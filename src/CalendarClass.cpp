@@ -737,6 +737,54 @@ void CalendarClass::attribute_factory(vector<Tango::Attr *> &att_list)
 	shiftactivity->set_archive_event(true, true);
 	att_list.push_back(shiftactivity);
 
+	//	Attribute : activityNum
+	activityNumAttrib	*activitynum = new activityNumAttrib();
+	Tango::UserDefaultAttrProp	activitynum_prop;
+	activitynum_prop.set_description("Number corresponding to activity label, -1 if unknown activity");
+	//	label	not set for activityNum
+	//	unit	not set for activityNum
+	//	standard_unit	not set for activityNum
+	//	display_unit	not set for activityNum
+	//	format	not set for activityNum
+	//	max_value	not set for activityNum
+	//	min_value	not set for activityNum
+	//	max_alarm	not set for activityNum
+	//	min_alarm	not set for activityNum
+	//	max_warning	not set for activityNum
+	//	min_warning	not set for activityNum
+	//	delta_t	not set for activityNum
+	//	delta_val	not set for activityNum
+	
+	activitynum->set_default_properties(activitynum_prop);
+	//	Not Polled
+	activitynum->set_disp_level(Tango::OPERATOR);
+	//	Not Memorized
+	att_list.push_back(activitynum);
+
+	//	Attribute : shiftActivityNum
+	shiftActivityNumAttrib	*shiftactivitynum = new shiftActivityNumAttrib();
+	Tango::UserDefaultAttrProp	shiftactivitynum_prop;
+	shiftactivitynum_prop.set_description("Number corresponding to activity label, -1 if unknown activity");
+	//	label	not set for shiftActivityNum
+	//	unit	not set for shiftActivityNum
+	//	standard_unit	not set for shiftActivityNum
+	//	display_unit	not set for shiftActivityNum
+	//	format	not set for shiftActivityNum
+	//	max_value	not set for shiftActivityNum
+	//	min_value	not set for shiftActivityNum
+	//	max_alarm	not set for shiftActivityNum
+	//	min_alarm	not set for shiftActivityNum
+	//	max_warning	not set for shiftActivityNum
+	//	min_warning	not set for shiftActivityNum
+	//	delta_t	not set for shiftActivityNum
+	//	delta_val	not set for shiftActivityNum
+	
+	shiftactivitynum->set_default_properties(shiftactivitynum_prop);
+	//	Not Polled
+	shiftactivitynum->set_disp_level(Tango::OPERATOR);
+	//	Not Memorized
+	att_list.push_back(shiftactivitynum);
+
 	//	Attribute : shiftNames
 	shiftNamesAttrib	*shiftnames = new shiftNamesAttrib();
 	Tango::UserDefaultAttrProp	shiftnames_prop;

@@ -119,6 +119,32 @@ public:
 		{return (static_cast<Calendar *>(dev))->is_shiftActivity_allowed(ty);}
 };
 
+//	Attribute activityNum class definition
+class activityNumAttrib: public Tango::Attr
+{
+public:
+	activityNumAttrib():Attr("activityNum",
+			Tango::DEV_SHORT, Tango::READ) {};
+	~activityNumAttrib() {};
+	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
+		{(static_cast<Calendar *>(dev))->read_activityNum(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<Calendar *>(dev))->is_activityNum_allowed(ty);}
+};
+
+//	Attribute shiftActivityNum class definition
+class shiftActivityNumAttrib: public Tango::Attr
+{
+public:
+	shiftActivityNumAttrib():Attr("shiftActivityNum",
+			Tango::DEV_SHORT, Tango::READ) {};
+	~shiftActivityNumAttrib() {};
+	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
+		{(static_cast<Calendar *>(dev))->read_shiftActivityNum(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<Calendar *>(dev))->is_shiftActivityNum_allowed(ty);}
+};
+
 //	Attribute shiftNames class definition
 class shiftNamesAttrib: public Tango::SpectrumAttr
 {
